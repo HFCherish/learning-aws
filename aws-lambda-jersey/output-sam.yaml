@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AWS Serverless Jersey API - learning.aws::aws-lambda-jersey
+Outputs:
+  AwsLambdaJerseyApi:
+    Description: URL for application
+    Export:
+      Name: AwsLambdaJerseyApi
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/ping
+Resources:
+  AwsLambdaJerseyFunction:
+    Properties:
+      CodeUri: s3://test-aws-lambda-jersey1/38022bc8381a4675b7abab1e1d95d5a9
+      Events:
+        GetResource:
+          Properties:
+            Method: any
+            Path: /{proxy+}
+          Type: Api
+      Handler: learning.aws.StreamLambdaHandler::handleRequest
+      MemorySize: 512
+      Policies: AWSLambdaBasicExecutionRole
+      Runtime: java8
+      Timeout: 15
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
