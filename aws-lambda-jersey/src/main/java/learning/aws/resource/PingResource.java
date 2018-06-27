@@ -21,7 +21,7 @@ public class PingResource {
     public Response createPet() {
         Map<String, Object> pong = new HashMap<>();
         pong.put("pong", "Hello, World!");
-        pong.put("new Features", asList("support injection!"));
+        pong.put("new Features", asList("support injection!", "supprot hk2 injection"));
         return Response.status(200).entity(pong).build();
     }
 }
