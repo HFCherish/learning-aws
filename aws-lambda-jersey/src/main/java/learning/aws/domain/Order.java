@@ -17,6 +17,12 @@ public class Order {
         this.amount = amount;
     }
 
+    public Order(String user, int amount, String id) {
+        this.user = user;
+        this.amount = amount;
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

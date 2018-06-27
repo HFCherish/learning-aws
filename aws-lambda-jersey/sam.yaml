@@ -11,12 +11,41 @@ Resources:
       MemorySize: 512
       Policies: AWSLambdaBasicExecutionRole
       Timeout: 15
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref orders
       Events:
         GetResource:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: any
+        Stream:
+          Type: DynamoDB
+          Properties:
+            Stream: !GetAtt orders.StreamArn
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+  orders:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+#        - AttributeName: user
+#          AttributeType: S
+#        - AttributeName: amount
+#          AttributeType: N
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      TableName: orders
+
 
 Outputs:
   AwsLambdaJerseyApi:

@@ -10,17 +10,45 @@ Outputs:
 Resources:
   AwsLambdaJerseyFunction:
     Properties:
-      CodeUri: s3://test-aws-lambda-jersey1/d8932fe4a59274a2cfb82d2a9d2f629c
+      CodeUri: s3://test-aws-lambda-jersey1/07f0f48098beed2f084103479ea284c5
+      Environment:
+        Variables:
+          TABLE_NAME:
+            Ref: orders
       Events:
         GetResource:
           Properties:
             Method: any
             Path: /{proxy+}
           Type: Api
+        Stream:
+          Properties:
+            BatchSize: 100
+            StartingPosition: TRIM_HORIZON
+            Stream:
+              Fn::GetAtt:
+              - orders
+              - StreamArn
+          Type: DynamoDB
       Handler: learning.aws.StreamLambdaHandler::handleRequest
       MemorySize: 512
       Policies: AWSLambdaBasicExecutionRole
       Runtime: java8
       Timeout: 15
     Type: AWS::Serverless::Function
+  orders:
+    Properties:
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+      StreamSpecification:
+        StreamViewType: NEW_IMAGE
+      TableName: orders
+    Type: AWS::DynamoDB::Table
 Transform: AWS::Serverless-2016-10-31

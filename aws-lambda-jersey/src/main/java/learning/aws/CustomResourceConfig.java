@@ -6,6 +6,7 @@ import com.amazonaws.serverless.proxy.jersey.suppliers.AwsProxyServletResponseSu
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import learning.aws.infrastructure.Models;
 import org.glassfish.hk2.api.ServiceLocator;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
 import org.glassfish.jersey.jackson.JacksonFeature;
