@@ -1,13 +1,13 @@
 package learning.aws.resource;
 
 import learning.aws.domain.Order;
+import learning.aws.domain.OrdersRepo;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,26 +18,15 @@ import java.util.Map;
 @Path("/orders")
 public class OrdersResource {
 
-//    @Context
-//    OrdersRepo ordersRepo;
+    @Inject
+    OrdersRepo ordersRepo;
 
-    static Map<String, Order> orders = new HashMap<>();
-
-    static {
-        addOrder(new Order("petrina-default", 78));
-    }
-
-    static void addOrder(Order order) {
-        orders.put(order.getId(), order);
-    }
 
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createOrder(Map<String, Object> order) {
-//        Order saved = ordersRepo.save(order);
-        Order saved = new Order(order.getOrDefault("user", "").toString(), (int) order.getOrDefault("amount", 0));
-        addOrder(saved);
+        Order saved = ordersRepo.save(order);
         return Response.created(URI.create("/orders/" + saved.getId())).build();
     }
 
@@ -45,13 +34,11 @@ public class OrdersResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public List<Order> getAll(@QueryParam("limit") Integer limit) {
-//        return ordersRepo.getAll(limit);
-
-        return new ArrayList<>(orders.values()).subList(0, limit > orders.size() ? orders.size() : limit);
+        return ordersRepo.getAll(limit);
     }
 
     @Path("{id}")
     public OrderResource getOne(@PathParam("id") String id) {
-        return new OrderResource(orders.get(id));
+        return ordersRepo.getOne(id).map(OrderResource::new).orElseThrow(() -> new NotFoundException("order " + id + "not exists!"));
     }
 }

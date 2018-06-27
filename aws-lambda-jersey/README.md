@@ -2,7 +2,7 @@ created with [`aws-serverless-java-container`](https://github.com/awslabs/aws-se
 
 详情可参见 [在 aws lambda 中应用 jersey](https://hfcherish.github.io/2018/06/27/aws-lambda-jersey/)
 
-本系统最终采用 [`aws-sam-cli`](https://github.com/awslabs/aws-sam-cli) 进行本地调试和部署。
+本系统保留了 `sam.yaml` 和 `template.yaml`，可以自由选择采用 [`aws-sam-cli`](https://github.com/awslabs/aws-sam-cli) 进行本地调试和部署；或者使用 `
 
 # 测试运行
 

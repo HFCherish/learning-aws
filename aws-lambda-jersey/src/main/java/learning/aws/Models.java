@@ -1,6 +1,8 @@
 package learning.aws;
 
 import com.google.inject.AbstractModule;
+import learning.aws.domain.OrdersRepo;
+import learning.aws.infrastructure.OrdersRepoImpl;
 
 import java.util.Properties;
 
@@ -53,6 +55,7 @@ public class Models extends AbstractModule {
 //        bind(OrderMapper.class).to(OrderDao.class);
 //        requestStaticInjection(SafeInjector.class);
 //        bind(OrderValidator.class);
+        bind(OrdersRepo.class).to(OrdersRepoImpl.class);
     }
 
 }

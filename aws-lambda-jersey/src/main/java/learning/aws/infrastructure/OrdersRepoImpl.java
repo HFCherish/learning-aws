@@ -3,30 +3,37 @@ package learning.aws.infrastructure;
 import learning.aws.domain.Order;
 import learning.aws.domain.OrdersRepo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hf_cherish
  * @date 2018/6/26
  */
 public class OrdersRepoImpl implements OrdersRepo {
-    static List<Order> orders = new ArrayList<>();
+    static Map<String, Order> orders = new HashMap<>();
 
     static {
-        orders.add(new Order("petrina-default", 78));
+        addOrder(new Order("petrina-default", 78));
+    }
+
+    static void addOrder(Order order) {
+        orders.put(order.getId(), order);
     }
 
     @Override
     public Order save(Map<String, Object> order) {
         Order saved = new Order(order.getOrDefault("user", "").toString(), (int) order.getOrDefault("amount", 0));
-        orders.add(saved);
+        addOrder(saved);
         return saved;
     }
 
     @Override
     public List<Order> getAll(Integer limit) {
-        return orders.subList(0, limit);
+        return new ArrayList<>(orders.values()).subList(0, limit > orders.size() ? orders.size() : limit);
+    }
+
+    @Override
+    public Optional<Order> getOne(String id) {
+        return Optional.ofNullable(orders.get(id));
     }
 }
