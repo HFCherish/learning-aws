@@ -6,9 +6,10 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.*;
-
-import static java.util.Arrays.asList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hf_cherish
@@ -46,7 +47,7 @@ public class OrdersResource {
     public List<Order> getAll(@QueryParam("limit") Integer limit) {
 //        return ordersRepo.getAll(limit);
 
-        return new ArrayList<>(orders.values()).subList(0, limit);
+        return new ArrayList<>(orders.values()).subList(0, limit > orders.size() ? orders.size() : limit);
     }
 
     @Path("{id}")
