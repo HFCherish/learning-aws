@@ -20,23 +20,13 @@ public class OrdersRepoImpl implements OrdersRepo {
         this.orders = dynamoDB.getTable(DBConstants.ORDERS_TABLE);
     }
 
-//    static Map<String, Order> orders = new HashMap<>();
-//
-//    static {
-//        addOrder(new Order("petrina-default", 78));
-//    }
-
-//    static void addOrder(Order order) {
-//        orders.put(order.getId(), order);
-//    }
-
     @Override
     public Order save(Map<String, Object> order) {
-        Order toSave = new Order(order.getOrDefault("user", "").toString(), (int) order.getOrDefault("amount", 0));
+        Order toSave = new Order(order.getOrDefault(DBConstants.ORDER_USER, "").toString(), (int) order.getOrDefault(DBConstants.ORDER_AMOUNT, 0));
         orders.putItem(new Item()
-                .withPrimaryKey("id", toSave.getId())
-                .withString("user", toSave.getUser())
-                .withInt("amount", toSave.getAmount())
+                .withPrimaryKey(DBConstants.ORDER_ID, toSave.getId())
+                .withString(DBConstants.ORDER_USER, toSave.getUser())
+                .withInt(DBConstants.ORDER_AMOUNT, toSave.getAmount())
         );
         return toSave;
     }
@@ -49,16 +39,15 @@ public class OrdersRepoImpl implements OrdersRepo {
             fetched.add(buildOrderFromItem(iterator.next()));
         }
         return fetched;
-//        return new ArrayList<>(orders.values()).subList(0, limit > orders.size() ? orders.size() : limit);
     }
 
     private Order buildOrderFromItem(Item next) {
-        return new Order(next.getString("user"), next.getInt("amount"), next.getString("id"));
+        return new Order(next.getString(DBConstants.ORDER_USER), next.getInt(DBConstants.ORDER_AMOUNT), next.getString(DBConstants.ORDER_ID));
     }
 
     @Override
     public Optional<Order> getOne(String id) {
-        Item item = orders.getItem("id", id);
+        Item item = orders.getItem(DBConstants.ORDER_ID, id);
         return item == null ? Optional.empty() : Optional.of(buildOrderFromItem(item));
     }
 }
