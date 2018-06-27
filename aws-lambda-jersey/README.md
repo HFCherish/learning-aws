@@ -1,109 +1,26 @@
-# aws-lambda-jersey serverless API
-The aws-lambda-jersey project, created with [`aws-serverless-java-container`](https://github.com/awslabs/aws-serverless-java-container).
+created with [`aws-serverless-java-container`](https://github.com/awslabs/aws-serverless-java-container).
 
-The starter project defines a simple `/ping` resource that can accept `GET` requests with its tests.
+详情可参见 [在 aws lambda 中应用 jersey](https://hfcherish.github.io/2018/06/27/aws-lambda-jersey/)
 
-The project folder also includes a `sam.yaml` file. You can use this [SAM](https://github.com/awslabs/serverless-application-model) file to deploy the project to AWS Lambda and Amazon API Gateway or test in local with [SAM Local](https://github.com/awslabs/aws-sam-local). 
+本系统最终采用 [`aws-sam-cli`](https://github.com/awslabs/aws-sam-cli) 进行本地调试和部署。
 
-Using [Maven](https://maven.apache.org/), you can create an AWS Lambda-compatible jar file simply by running the maven package command from the projct folder.
+# 测试运行
 
-```bash
-$ mvn archetype:generate -DartifactId=my-jersey-api -DarchetypeGroupId=com.amazonaws.serverless.archetypes -DarchetypeArtifactId=aws-serverless-jersey-archetype -DarchetypeVersion=1.0-SNAPSHOT -DgroupId=com.sapessi.jersey -Dversion=0.1 -Dinteractive=false
-$ cd my-jersey-api
-$ mvn clean package
+1. clone 代码到本地
+2. 根据 [在 aws lambda 中应用 jersey](https://hfcherish.github.io/2018/06/27/aws-lambda-jersey/) 安装 `aws-cli` 和 `aws-sam-cli`
+3. `mvn clean package`
+3. `sam local start-api`
+4. `curl http://localhost:3000/ping`
 
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time: 6.546 s
-[INFO] Finished at: 2018-02-15T08:39:33-08:00
-[INFO] Final Memory: XXM/XXXM
-[INFO] ------------------------------------------------------------------------
-```
+能 ping 通，则代码可运行。如果 ping 不通。可能是 docker 的问题，可以重装解决。
 
-You can use [AWS SAM Local](https://github.com/awslabs/aws-sam-local) to start your project.
+# api
 
-First, install SAM local:
+包含以下 API：
 
-```bash
-$ npm install -g aws-sam-local
-```
-
-Next, from the project root folder - where the `sam.yaml` file is located - start the API with the SAM Local CLI.
-
-```bash
-$ sam local start-api --template sam.yaml
-
-...
-Mounting learning.aws.StreamLambdaHandler::handleRequest (java8) at http://127.0.0.1:3000/{proxy+} [OPTIONS GET HEAD POST PUT DELETE PATCH]
-...
-```
-
-Using a new shell, you can send a test ping request to your API:
-
-```bash
-$ curl -s http://127.0.0.1:3000/ping | python -m json.tool
-
-{
-    "pong": "Hello, World!"
-}
-``` 
-
-You can use the [AWS CLI](https://aws.amazon.com/cli/) to quickly deploy your application to AWS Lambda and Amazon API Gateway with your SAM template.
-
-You will need an S3 bucket to store the artifacts for deployment. Once you have created the S3 bucket, run the following command from the project's root folder - where the `sam.yaml` file is located:
-
-```
-$ aws cloudformation package --template-file sam.yaml --output-template-file output-sam.yaml --s3-bucket <YOUR S3 BUCKET NAME>
-Uploading to xxxxxxxxxxxxxxxxxxxxxxxxxx  6464692 / 6464692.0  (100.00%)
-Successfully packaged artifacts and wrote output template to file output-sam.yaml.
-Execute the following command to deploy the packaged template
-aws cloudformation deploy --template-file /your/path/output-sam.yaml --stack-name <YOUR STACK NAME>
-```
-
-As the command output suggests, you can now use the cli to deploy the application. Choose a stack name and run the `aws cloudformation deploy` command from the output of the package command.
- 
-```
-$ aws cloudformation deploy --template-file output-sam.yaml --stack-name ServerlessJerseyApi --capabilities CAPABILITY_IAM
-```
-
-Once the application is deployed, you can describe the stack to show the API endpoint that was created. The endpoint should be the `ServerlessJerseyApi` key of the `Outputs` property:
-
-```
-$ aws cloudformation describe-stacks --stack-name ServerlessJerseyApi
-{
-    "Stacks": [
-        {
-            "StackId": "arn:aws:cloudformation:us-west-2:xxxxxxxx:stack/ServerlessJerseyApi/xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxx", 
-            "Description": "AWS Serverless Jersey API - learning.aws::aws-lambda-jersey", 
-            "Tags": [], 
-            "Outputs": [
-                {
-                    "Description": "URL for application",
-                    "ExportName": "AwsLambdaJerseyApi",  
-                    "OutputKey": "AwsLambdaJerseyApi",
-                    "OutputValue": "https://xxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/ping"
-                }
-            ], 
-            "CreationTime": "2016-12-13T22:59:31.552Z", 
-            "Capabilities": [
-                "CAPABILITY_IAM"
-            ], 
-            "StackName": "ServerlessJerseyApi", 
-            "NotificationARNs": [], 
-            "StackStatus": "UPDATE_COMPLETE"
-        }
-    ]
-}
-
-```
-
-Copy the `OutputValue` into a browser or use curl to test your first request:
-
-```bash
-$ curl -s https://xxxxxxx.execute-api.us-west-2.amazonaws.com/Prod/ping | python -m json.tool
-
-{
-    "pong": "Hello, World!"
-}
-```
+* `GET` /ping
+* `GET` /orders?limit={number}
+* `POST` /orders 
+    * `user`: string
+    * `amount`: number
+* `GET` /orders/{oid} 
