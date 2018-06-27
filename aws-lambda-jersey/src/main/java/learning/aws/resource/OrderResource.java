@@ -10,10 +10,10 @@ import javax.ws.rs.core.MediaType;
  * @author hf_cherish
  * @date 2018/6/26
  */
-public class OrderApi {
+public class OrderResource {
     private Order order;
 
-    public OrderApi(Order order) {
+    public OrderResource(Order order) {
         this.order = order;
     }
 

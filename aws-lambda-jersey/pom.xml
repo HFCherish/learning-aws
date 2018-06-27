@@ -14,6 +14,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <jersey.version>2.26</jersey.version>
+        <hk2.version>2.5.0-b61</hk2.version>
     </properties>
 
     <dependencies>
@@ -28,38 +29,6 @@
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.version}</version>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.datatype</groupId>-->
-            <!--<artifactId>jackson-datatype-joda</artifactId>-->
-            <!--<version>2.4.0</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.test-framework</groupId>-->
-            <!--<artifactId>jersey-test-framework-core</artifactId>-->
-            <!--<version>2.17</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.test-framework.providers</groupId>-->
-            <!--<artifactId>jersey-test-framework-provider-grizzly2</artifactId>-->
-            <!--<version>2.17</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.glassfish.jersey.bundles.repackaged</groupId>-->
-            <!--<artifactId>jersey-guava</artifactId>-->
-            <!--<version>2.6</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.core</groupId>-->
-            <!--<artifactId>jackson-core</artifactId>-->
-            <!--<version>2.5.2</version>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>org.mockito</groupId>
@@ -84,7 +53,33 @@
         <dependency>
             <groupId>org.glassfish.hk2</groupId>
             <artifactId>hk2-api</artifactId>
-            <version>2.5.0-b42</version>
+            <version>${hk2.version}</version>
+            <!-- excluding redundant javax.inject dependency -->
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.glassfish.hk2</groupId>
+            <artifactId>guice-bridge</artifactId>
+            <version>${hk2.version}</version>
+            <!-- excluding redundant javax.inject dependency -->
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.inject</groupId>
+                    <artifactId>javax.inject</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>4.2.0</version>
             <!-- excluding redundant javax.inject dependency -->
             <exclusions>
                 <exclusion>

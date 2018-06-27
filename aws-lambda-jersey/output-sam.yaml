@@ -10,7 +10,7 @@ Outputs:
 Resources:
   AwsLambdaJerseyFunction:
     Properties:
-      CodeUri: s3://test-aws-lambda-jersey1/8b5b6023ccf1dce7bb06de39cfbf2781
+      CodeUri: s3://test-aws-lambda-jersey1/5ee7517c439ff431e44ba4150282d1c4
       Events:
         GetResource:
           Properties:

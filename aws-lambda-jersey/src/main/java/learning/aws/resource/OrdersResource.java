@@ -51,7 +51,7 @@ public class OrdersResource {
     }
 
     @Path("{id}")
-    public OrderApi getOne(@PathParam("id") String id) {
-        return new OrderApi(orders.get(id));
+    public OrderResource getOne(@PathParam("id") String id) {
+        return new OrderResource(orders.get(id));
     }
 }
